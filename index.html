@@ -155,7 +155,11 @@
 
     <script>
 var editor; // 在最外層宣告，它是全域的大腦
-        window.onload = function() {
+        if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("離線功能已啟動"));
+}
+window.onload = function() {
             // 嘗試從本地儲存讀取舊內容
             var saved = localStorage.getItem("my_code") || "<h1>你好！</h1>";
 
