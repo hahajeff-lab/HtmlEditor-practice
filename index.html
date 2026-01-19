@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.css">
+  <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2c3e50">    
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -122,13 +123,27 @@
     .symbol-bar button:active {
         background: #666;
     }
+  
+  .CodeMirror-dialog {/* 搜尋框樣式 */
+    background: #2c3e50;
+    color: white;
+    padding: 10px;
+    font-family: sans-serif;
+    border-bottom: 2px solid #3498db;
+}
+.CodeMirror-dialog input {/* 搜尋框輸入樣式 */
+    background: #1e1e1e;
+    color: white;
+    border: 1px solid #555;
+    padding: 5px;
+    margin-left: 5px;
+}
 </style>
 </head>
 <body>
     <div class="header">
-<div class="title">HTML Editor</div>
-    
-<div class="file-ops">
+	<div class="title">HTML Editor</div>
+    <div class="file-ops">
         <button onclick="newFile()">新建</button>
         <button onclick="saveFile()">存檔</button>
         <button onclick="loadFile()">讀取</button>
@@ -142,8 +157,9 @@
 
 <div class="symbol-bar"><!--手機方便符號-->
     <button onclick="addBrackets()">&lt;&gt;</button> <button onclick="addQuotes()">""</button>      
-<button onclick="addParentheses()">()</button> <button onclick="addChar('/')">/</button>   
-<button onclick="addChar('/')">/</button>
+<button onclick="addParentheses()">()</button> 
+  <button onclick="addChar('/')">/</button>   
+
     <button onclick="addChar('=')">=</button>
     <button onclick="addChar('!')">!</button>
     <button onclick="addChar(' ')">空格</button>
@@ -151,6 +167,11 @@
 </div>
 
 <textarea id="my-code-area"></textarea><!--編輯區-->
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/search.min.js"></script>
+  
 <iframe id="preview-window"></iframe><!--預覽分頁-->
     <script src="codemirror.js"></script>
     <script src="xml.js"></script>
