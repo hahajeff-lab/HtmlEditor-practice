@@ -1,4 +1,4 @@
-const cacheName = 'editor-v2';
+const cacheName = 'editor-v3';
 const assets = [
   './',
   './index.html',
@@ -26,3 +26,4 @@ self.addEventListener('fetch', e => {
   );
 
 });
+
