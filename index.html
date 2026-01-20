@@ -10,9 +10,6 @@
     
     <link rel="stylesheet" href="codemirror.css">
 　　<link rel="stylesheet" href="monokai.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/search.min.js"></script>
     
 <style>
     /* 1. 地基：讓 body 變成一個垂直的盒子 */
@@ -175,7 +172,9 @@
 <iframe id="preview-window"></iframe><!--預覽分頁-->
     <script src="codemirror.js"></script>
     <script src="xml.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/search/search.min.js"></script>
     <script>
 var editor; // 在最外層宣告，它是全域的大腦
         if ('serviceWorker' in navigator) {
@@ -320,6 +319,72 @@ function switchTab(mode) {
         editor.refresh();
     }
 }
+    var editor;
+
+    // 1. 初始化編輯器
+    window.onload = function() {
+        editor = CodeMirror.fromTextArea(document.getElementById("my-code-area"), {
+            lineNumbers: true,
+            mode: "text/html",
+            theme: "monokai",
+            lineWrapping: true
+        });
+        
+        // 讀取上次存檔 (如果有)
+        var saved = localStorage.getItem("html_code");
+        if (saved) editor.setValue(saved);
+        
+        // 強制刷新確保不變扁
+        setTimeout(function() { editor.refresh(); }, 300);
+    };
+
+    // 2. 分頁切換邏輯 (編輯 vs 預覽)
+    function switchTab(mode) {
+        var editTab = document.getElementById('edit-tab');
+        var previewTab = document.getElementById('preview-tab');
+        var editorEl = document.querySelector('.CodeMirror');
+        var previewWindow = document.getElementById('preview-window');
+
+        if (mode === 'preview') {
+            // 切換到預覽
+            editTab.classList.remove('active');
+            previewTab.classList.add('active');
+            editorEl.style.display = 'none';
+            previewWindow.style.display = 'block';
+            
+            // 將編輯器的內容寫入 iframe
+            var content = editor.getValue();
+            var doc = previewWindow.contentDocument || previewWindow.contentWindow.document;
+            doc.open();
+            doc.write(content);
+            doc.close();
+        } else {
+            // 切換到編輯
+            previewTab.classList.remove('active');
+            editTab.classList.add('active');
+            editorEl.style.display = 'block';
+            previewWindow.style.display = 'none';
+            editor.refresh(); // 回來時刷新一下確保佈局正確
+        }
+    }
+
+    // 3. 符號輸入功能 (範例)
+    function addChar(char) {
+        var doc = editor.getDoc();
+        var cursor = doc.getCursor();
+        doc.replaceRange(char, cursor);
+        editor.focus();
+    }
+    
+    function addQuotes() { addChar('""'); }
+    function addBrackets() { addChar('<>'); }
+    function addParentheses() { addChar('()'); }
+    
+    // 4. 存檔功能
+    function saveFile() {
+        localStorage.setItem("html_code", editor.getValue());
+        alert("已存檔至本地儲存空間");
+    }
 
     </script>
 </body>
